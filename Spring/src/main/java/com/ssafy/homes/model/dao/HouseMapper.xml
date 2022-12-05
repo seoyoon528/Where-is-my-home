@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.homes.model.dao.HouseMapper">
+	<select id="getSido" resultType="com.ssafy.homes.model.dto.DongCodeDTO">
+		 select sidoName 
+		 from dongcode 
+		 group by sidoName
+	</select>
+	
+	<select id="getGugun" parameterType="string" resultType="com.ssafy.homes.model.dto.DongCodeDTO">
+		select gugunName 
+		from dongcode 
+		where sidoName = #{sido}
+		group by gugunName
+	</select>
+	
+	<select id="getDong" resultType="com.ssafy.homes.model.dto.DongCodeDTO">
+		select dongName 
+		from dongcode 
+		where sidoName = #{sido} and gugunName = #{gugun}
+	</select>
+	
+	<select id="getCode" resultType="string">
+		select dongcode 
+		from dongcode 
+		where sidoname = #{sido} and gugunname= #{gugun} and dongname = #{dong}
+	</select>
+	
+	<select id="getDongCode" parameterType="Long" resultType="com.ssafy.homes.model.dto.DongCodeDTO">
+		select *
+		from dongcode
+		where dongcode in (select dongCode
+		from houseinfo 
+		where aptcode = #{aptcode})
+	</select>
+	
+	<select id="getApts" parameterType="string" resultType="com.ssafy.homes.model.dto.HouseInfoDTO">
+		select aptCode, buildYear, roadName, dongCode, apartmentName, lng, lat 
+		from houseinfo 
+		where dongCode = #{code}
+	</select>
+	
+	<select id="getApt" parameterType="Long" resultType="com.ssafy.homes.model.dto.HouseInfoDTO">
+		select  aptCode, buildYear, roadName, dongCode, apartmentName, lng, lat 
+		from houseinfo 
+		where aptCode= #{aptcode}
+	</select>
+	
+	<select id="getDeals" parameterType="Long" resultType="com.ssafy.homes.model.dto.HouseDealDTO">
+		select * 
+		from housedeal 
+		where aptCode = #{aptcode} 
+		order by dealYear desc
+	</select>
+	
+	<select id="getDealsMOrder" parameterType="Long" resultType="com.ssafy.homes.model.dto.HouseDealDTO">
+		
+	</select>
+	
+	<select id="getTotalDongAptCount" parameterType="String" resultType="int">
+		select count(*)
+		from houseinfo join housedeal
+		on houseinfo.aptCode = housedeal.aptCode
+		where dongCode = #{dongCode};
+	</select>
+	
+	<select id="getTop3AptList" parameterType="String" resultType="com.ssafy.homes.model.dto.AptTop3DTO">
+		select houseinfo.aptCode as aptCode, apartmentName, count(*) as count
+		from houseinfo join housedeal
+		on houseinfo.aptCode = housedeal.aptCode
+		where dongCode = #{dongCode}
+		group by houseinfo.aptCode
+		order by count(*) desc
+		limit 0, 3;
+	</select>
+</mapper>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.homes.model.dao.BoardMapper">
+		
+	<select id="selectList" resultType="com.ssafy.homes.model.dto.BoardDTO">
+		SELECT BOARDNO, BOARDTYPE, BOARDWRITER, BOARDTITLE, BOARDCONTENT, BOARDDATE
+		FROM BOARD
+		WHERE BOARDTYPE = #{boardType}
+		ORDER BY BOARDNO DESC
+		LIMIT #{start}, #{cnt}
+	</select>
+		
+	<select id="selectTotalCount" resultType="int" parameterType="String">
+		SELECT COUNT(*)
+		FROM BOARD
+		WHERE BOARDTYPE = #{boardType}
+	</select>
+	
+	<insert id="insert" parameterType="com.ssafy.homes.model.dto.BoardDTO" useGeneratedKeys="true" keyProperty="boardno" keyColumn="BOARDNO">
+		INSERT INTO BOARD(BOARDTYPE, BOARDTITLE, BOARDWRITER, BOARDCONTENT, BOARDDATE)
+		VALUES(#{boardtype}, #{boardtitle}, #{boardwriter}, #{boardcontent}, CURDATE())
+	</insert>
+	
+	<select id="selectOne" resultType="com.ssafy.homes.model.dto.BoardDTO">
+		SELECT BOARDNO, BOARDTYPE, BOARDWRITER, BOARDTITLE, BOARDCONTENT, BOARDDATE
+		FROM BOARD
+		WHERE BOARDNO = #{bno}
+	</select>
+	
+	<select id="getComments" resultType="com.ssafy.homes.model.dto.CommentDTO">
+		SELECT COMMENTNO, COMMENTWRITER, COMMENTCONTENT, COMMENTDATE
+		FROM COMMENT
+		WHERE BOARDNO = #{boardno}
+		ORDER BY COMMENTNO DESC
+	</select>
+
+	<insert id="insertComment" parameterType="com.ssafy.homes.model.dto.CommentDTO" useGeneratedKeys="true" keyProperty="commentno" keyColumn="COMMENTNO">
+		INSERT INTO COMMENT(BOARDNO, COMMENTWRITER, COMMENTCONTENT, COMMENTDATE)
+		VALUES(#{boardno}, #{commentwriter}, #{commentcontent}, NOW())
+	</insert>
+	
+	<delete id="boardDelete" parameterType="int">
+		DELETE
+		FROM BOARD
+		WHERE BOARDNO=#{boardno}
+	</delete>
+	
+	<update id="boardUpdate" parameterType="com.ssafy.homes.model.dto.BoardDTO">
+		UPDATE BOARD
+		SET BOARDTITLE=#{boardtitle}, BOARDCONTENT=#{boardcontent}
+		WHERE BOARDNO = #{boardno} AND BOARDWRITER=#{boardwriter}
+	</update>
+	
+	<delete id="deleteComment" parameterType="int">
+		DELETE
+		FROM COMMENT
+		WHERE COMMENTNO=#{commentno}
+	</delete>
+	
+
+</mapper>
