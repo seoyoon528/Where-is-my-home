@@ -30,7 +30,7 @@
 | --- | --- |
 | 개발 언어 | Java, JavaScript, HTML, CSS |
 | 데이터베이스 | MySql |
-| 프레임워크 | SpringFrameWork.Boot, Maven, MyBatis, Vue.js, Vuex, Vuetify |
+| 프레임워크 | SpringBoot, Maven, MyBatis, Vue.js, Vuex, Vuetify |
 
 ### ✔️ 사용한 API
 
